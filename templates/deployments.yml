@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: msa-register-service
-          image: docker.io/yoon741/msa_register_service:v1  # 이미지 이름 수정
+          image: docker.io/yoon741/msa_register_service:v1
           ports:
             - containerPort: 8000
           env:
@@ -38,7 +38,7 @@ spec:
             - name: MYSQL_PORT
               value: "3306"
             - name: CORS_ORIGINS
-              value: "http://192.168.56.1:30010,http://front-nodejs-svc:3000"
+              value: "http://43.203.111.138:30010,http://front-nodejs-svc:3000"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -80,7 +80,7 @@ spec:
             - name: MYSQL_PORT
               value: "3306"
             - name: CORS_ORIGINS
-              value: "http://192.168.56.1:30010,http://front-nodejs-svc:3000"
+              value: "http://43.203.111.138:30010,http://front-nodejs-svc:3000"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -122,7 +122,7 @@ spec:
             - name: MYSQL_PORT
               value: "3306"
             - name: CORS_ORIGINS
-              value: "http://192.168.56.1:30010,http://front-nodejs-svc:3000"
+              value: "http://43.203.111.138:30010,http://front-nodejs-svc:3000"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -141,7 +141,6 @@ spec:
       containers:
         - name: msa-statistics-service
           image: snicuz0588/msa-statistics-service:v5  # 이미지 이름 수정
-#          image: docdker/statistics:v4
           ports:
             - containerPort: 8003
           env:
@@ -165,4 +164,4 @@ spec:
             - name: MYSQL_PORT
               value: "3306"
             - name: CORS_ORIGINS
-              value: "http://192.168.56.1:30010,http://front-nodejs-svc:3000"
+              value: "http://43.203.111.138:30010,http://front-nodejs-svc:3000"
