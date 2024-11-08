@@ -1,0 +1,168 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msa-register-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msa-register-service
+  template:
+    metadata:
+      labels:
+        app: msa-register-service
+    spec:
+      containers:
+        - name: msa-register-service
+          image: docker.io/yoon741/msa_register_service:v1  # 이미지 이름 수정
+          ports:
+            - containerPort: 8000
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret  # Secret 이름
+                  key: MYSQL_USER  # Secret 키
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_DATABASE
+            - name: MYSQL_HOST
+              value: "mariadb"
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: CORS_ORIGINS
+              value: "http://192.168.56.1:30010,http://front-nodejs-svc:3000"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msa-payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msa-payment-service
+  template:
+    metadata:
+      labels:
+        app: msa-payment-service
+    spec:
+      containers:
+        - name: msa-payment-service
+          image: docker.io/ashashrain/parking-payment-service:v4  # 이미지 이름 수정
+          ports:
+            - containerPort: 8001
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret  # Secret 이름
+                  key: MYSQL_USER  # Secret 키
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_DATABASE
+            - name: MYSQL_HOST
+              value: "mariadb"
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: CORS_ORIGINS
+              value: "http://192.168.56.1:30010,http://front-nodejs-svc:3000"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msa-product-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msa-product-service
+  template:
+    metadata:
+      labels:
+        app: msa-product-service
+    spec:
+      containers:
+        - name: msa-product-service
+          image: docdker/parking  # 이미지 이름 수정
+          ports:
+            - containerPort: 8002
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret  # Secret 이름
+                  key: MYSQL_USER  # Secret 키
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_DATABASE
+            - name: MYSQL_HOST
+              value: "mariadb"
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: CORS_ORIGINS
+              value: "http://192.168.56.1:30010,http://front-nodejs-svc:3000"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msa-statistics-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msa-statistics-service
+  template:
+    metadata:
+      labels:
+        app: msa-statistics-service
+    spec:
+      containers:
+        - name: msa-statistics-service
+          image: snicuz0588/msa-statistics-service:v5  # 이미지 이름 수정
+#          image: docdker/statistics:v4
+          ports:
+            - containerPort: 8003
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret  # Secret 이름
+                  key: MYSQL_USER  # Secret 키
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_DATABASE
+            - name: MYSQL_HOST
+              value: "mariadb"
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: CORS_ORIGINS
+              value: "http://192.168.56.1:30010,http://front-nodejs-svc:3000"
