@@ -85,20 +85,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: msa-product-service
+  name: msa-parking-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: msa-product-service
+      app: msa-parking-service
   template:
     metadata:
       labels:
-        app: msa-product-service
+        app: msa-parking-service
     spec:
       containers:
-        - name: msa-product-service
-          image: docker.io/yoon741/msa_product_service:latest  # latest 태그 사용
+        - name: msa-parking-service
+          image: docker.io/yoon741/msa_parking_service:latest  # latest 태그 사용
           ports:
             - containerPort: 8002
           env:
