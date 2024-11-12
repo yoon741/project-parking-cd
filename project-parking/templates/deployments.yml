@@ -21,7 +21,7 @@ spec:
             - "until nc -z -v -w30 mariadb-service 3306; do echo 'Waiting for mariadb...'; sleep 5; done;"
       containers:
         - name: msa-register-service
-          image: docker.io/yoon741/msa_register_service:latest
+          image: docker.io/yoon741/msa_register_service:${DOCKER_BUILD_TAG}
           ports:
             - containerPort: 8000
           env:
@@ -70,7 +70,7 @@ spec:
             - "until nc -z -v -w30 mariadb-service 3306; do echo 'Waiting for mariadb...'; sleep 5; done;"
       containers:
         - name: msa-payment-service
-          image: docker.io/yoon741/msa_payment_service:latest
+          image: docker.io/yoon741/msa_payment_service:${DOCKER_BUILD_TAG}
           ports:
             - containerPort: 8001
           env:
@@ -119,7 +119,7 @@ spec:
             - "until nc -z -v -w30 mariadb-service 3306; do echo 'Waiting for mariadb...'; sleep 5; done;"
       containers:
         - name: msa-parking-service
-          image: docker.io/yoon741/msa_parking_service:latest
+          image: docker.io/yoon741/msa_parking_service:${DOCKER_BUILD_TAG}
           ports:
             - containerPort: 8002
           env:
@@ -168,7 +168,7 @@ spec:
             - "until nc -z -v -w30 mariadb-service 3306; do echo 'Waiting for mariadb...'; sleep 5; done;"
       containers:
         - name: msa-statistics-service
-          image: docker.io/yoon741/msa_statistics_service:latest
+          image: docker.io/yoon741/msa_statistics_service:${DOCKER_BUILD_TAG}
           ports:
             - containerPort: 8003
           env:
