@@ -1,0 +1,36 @@
+replicaCount: 1
+
+deploy:
+  app:
+    register: msa-register
+    payment: msa-payment
+    product: msa-product
+    statistics: msa-statistics
+    nodejs: front-nodejs
+    nginx: front-nginx
+    mariadb: mariadb
+
+  port:
+    register: 8000
+    payment: 8001
+    product: 8002
+    statistics: 8003
+    nodejs: 3000
+    nginx: 80
+    mariadb: 3306
+
+maraidb:
+  name: mariadb-service
+
+url:
+  ip: 13.209.2.10
+  port:
+    frontend: 30010
+    REGIST_SRV_URL: 30100
+    PAYMENT_SRV_URL: 30300
+    PRODUCT_SRV_URL: 30400
+    STATISTICS_SRV_URL: 30500
+
+secret:
+  mariadb:
+    name: db-secret

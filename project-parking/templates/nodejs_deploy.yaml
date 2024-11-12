@@ -1,0 +1,54 @@
+# nodejs
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-nodejs-deploy
+  labels:
+    app: {{ .Values.deploy.app.nodejs}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.deploy.app.nodejs}}
+  template:
+    metadata:
+      name: {{ .Values.deploy.app.nodejs}}
+      labels:
+        app: {{ .Values.deploy.app.nodejs}}
+    spec:
+      initContainers:
+        - name: wait-for-mariadb
+          image: busybox
+          command:
+            - "sh"
+            - "-c"
+            - "until nc -z -v -w30 msa-statistics-service 8003; do echo 'Waiting for statistics-service...'; sleep 5; done;"
+      containers:
+        - name: {{ .Values.deploy.app.nodejs}}
+          image: dangdang42/arm64-nodejs:v1  # front-nodejs:v40
+          ports:
+            - containerPort: {{ .Values.deploy.port.nodejs }}
+          env:
+            - name: REGIST_SRV_URL
+              value: {{ .Values.url.ip }}:{{ .Values.url.port.REGIST_SRV_URL }}
+            - name: PAYMENT_SRV_URL
+              value: {{ .Values.url.ip }}:{{ .Values.url.port.PAYMENT_SRV_URL }}
+            - name: PRODUCT_SRV_URL
+              value: {{ .Values.url.ip }}:{{ .Values.url.port.PRODUCT_SRV_URL }}
+            - name: STATISTICS_SRV_URL
+              value: {{ .Values.url.ip }}:{{ .Values.url.port.STATISTICS_SRV_URL }}
+
+---
+# nodejs
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-nodejs-svc
+spec:
+  selector:
+    app: {{ .Values.deploy.app.nodejs}}
+  ports:
+
+    - port: {{ .Values.deploy.port.nodejs }}
+      protocol: TCP
+      targetPort: {{ .Values.deploy.port.nodejs }}

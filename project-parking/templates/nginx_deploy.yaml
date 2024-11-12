@@ -1,0 +1,46 @@
+# nginx
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-nginx-deploy
+  labels:
+    app: {{ .Values.deploy.app.nginx }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.deploy.app.nginx }}
+  template:
+    metadata:
+      name: {{ .Values.deploy.app.nginx }}
+      labels:
+        app: {{ .Values.deploy.app.nginx }}
+    spec:
+      initContainers:
+        - name: wait-for-mariadb
+          image: busybox
+          command:
+            - "sh"
+            - "-c"
+            - "until nc -z -v -w30 front-nodejs-svc 3000; do echo 'Waiting for nodejs...'; sleep 5; done;"
+      containers:
+        - name: {{ .Values.deploy.app.nginx }}
+          image: dangdang42/arm64-nginx:v1  # front-nginx:v19
+          ports:
+            - containerPort: {{ .Values.deploy.port.nginx }}
+
+---
+# nignx
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-nginx-svc
+spec:
+  selector:
+    app: {{ .Values.deploy.app.nginx }}
+  type: NodePort
+  ports:
+    - port: {{ .Values.deploy.port.nginx }}
+      protocol: TCP
+      targetPort: {{ .Values.deploy.port.nginx }}
+      nodePort: {{ .Values.url.port.frontend }}

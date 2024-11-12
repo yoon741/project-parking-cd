@@ -4,22 +4,22 @@ kind: Deployment
 metadata:
   name: mariadb-deploy
   labels:
-    app: mariadb
+    app: {{ .Values.deploy.app.mariadb }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mariadb
+      app: {{ .Values.deploy.app.mariadb }}
   template:
     metadata:
       labels:
-        app: mariadb
+        app: {{ .Values.deploy.app.mariadb }}
     spec:
       containers:
-        - name: mariadb
+        - name: {{ .Values.deploy.app.mariadb }}
           image: "mariadb:10.11.9-jammy"
           ports:
-            - containerPort: 3306
+            - containerPort: {{ .Values.deploy.port.mariadb }}
               protocol: TCP
           envFrom:
             - secretRef:
@@ -38,11 +38,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mariadb-service
+  name: {{ .Values.maraidb.name }}
 spec:
   type: ClusterIP  # 기본값, 내부 통신에 사용
   ports:
-    - port: 3306
-      targetPort: 3306
+    - port: {{ .Values.deploy.port.mariadb }}
+      targetPort: {{ .Values.deploy.port.mariadb }}
   selector:
-    app: mariadb
+    app: {{ .Values.deploy.app.mariadb }}
