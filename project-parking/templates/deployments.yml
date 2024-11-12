@@ -1,6 +1,69 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: front-nginx-deploy
+  labels:
+    app: front-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front-nginx
+  template:
+    metadata:
+      name: front-nginx
+      labels:
+        app: front-nginx
+    spec:
+      initContainers:
+        - name: wait-for-mariadb
+          image: busybox
+          command:
+            - "sh"
+            - "-c"
+            - "until nc -z -v -w30 front-nodejs-svc 3000; do echo 'Waiting for nodejs...'; sleep 5; done;"
+      containers:
+        - name: front-nginx
+          image: docker.io/yoon741/msa_frontend_nginx:${DOCKER_BUILD_TAG}
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-nodejs-deploy
+  labels:
+    app: front-nodejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front-nodejs
+  template:
+    metadata:
+      name: front-nodejs
+      labels:
+        app: front-nodejs
+    spec:
+      initContainers:
+        - name: wait-for-mariadb
+          image: busybox
+          command:
+            - "sh"
+            - "-c"
+            - "until nc -z -v -w30 msa-statistics-service 8003; do echo 'Waiting for statistics-service...'; sleep 5; done;"
+      containers:
+        - name: front-nodejs
+          image: dangdang42/front-nodejs:v40  # 32
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: front-secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: msa-register-service
 spec:
   replicas: 1
