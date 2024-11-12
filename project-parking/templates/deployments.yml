@@ -24,7 +24,7 @@ spec:
             - "until nc -z -v -w30 front-nodejs-svc 3000; do echo 'Waiting for nodejs...'; sleep 5; done;"
       containers:
         - name: front-nginx
-          image: docker.io/yoon741/msa_frontend_nginx:${DOCKER_BUILD_TAG}
+          image: docker.io/yoon741/msa_frontend_nodejs:${DOCKER_BUILD_TAG}
           ports:
             - containerPort: 80
 ---
@@ -54,7 +54,7 @@ spec:
             - "until nc -z -v -w30 msa-statistics-service 8003; do echo 'Waiting for statistics-service...'; sleep 5; done;"
       containers:
         - name: front-nodejs
-          image: dangdang42/front-nodejs:v40  # 32
+          image:  docker.io/yoon741/msa_frontend_nginx:${DOCKER_BUILD_TAG}
           ports:
             - containerPort: 3000
           envFrom:
