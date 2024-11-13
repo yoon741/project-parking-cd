@@ -23,7 +23,7 @@ maraidb:
   name: mariadb-service
 
 url:
-  ip: 13.209.19.20
+  ip: 43.201.111.115
   port:
     frontend: 30010
     REGIST_SRV_URL: 30100
