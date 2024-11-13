@@ -25,7 +25,7 @@ spec:
             - "until nc -z -v -w30 msa-statistics-service 8003; do echo 'Waiting for statistics-service...'; sleep 5; done;"
       containers:
         - name: {{ .Values.deploy.app.nodejs}}
-          image: dangdang42/arm64-nodejs:v1  # front-nodejs:v40
+          image: {{ .Values.imgs.NODEJS_IMG }}  # front-nodejs:v40
           ports:
             - containerPort: {{ .Values.deploy.port.nodejs }}
           env:

@@ -25,7 +25,7 @@ spec:
             - "until nc -z -v -w30 front-nodejs-svc 3000; do echo 'Waiting for nodejs...'; sleep 5; done;"
       containers:
         - name: {{ .Values.deploy.app.nginx }}
-          image: dangdang42/arm64-nginx:v1  # front-nginx:v19
+          image: {{ .Values.imgs.NGINX_IMG }}  # front-nginx:v19
           ports:
             - containerPort: {{ .Values.deploy.port.nginx }}
 
